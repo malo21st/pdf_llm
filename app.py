@@ -15,7 +15,7 @@ def communicate():
     messages = st.session_state["messages"]
 
     user_message = {"role": "user", "content": st.session_state["user_input"]}
-    messages.append(user_message)
+#     messages.append(user_message)
 
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -24,6 +24,7 @@ def communicate():
 
     bot_message = response["choices"][0]["message"]
     messages.append(bot_message)
+    messages.append(user_message)
 
     st.session_state["user_input"] = ""  # 入力欄を消去
 
