@@ -38,6 +38,6 @@ if st.session_state["messages"]:
     messages = st.session_state["messages"]
     for message in reversed(messages[1:]):  # 直近のメッセージを上に
         if message["role"]=="assistant":
-            st.warnimg(message["content"])
+            st.warnig(message["content"])
         else:
             st.info(message["content"])
