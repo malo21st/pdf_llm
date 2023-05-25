@@ -35,9 +35,9 @@ def communicate():
 
 # ユーザーインターフェイスの構築
 st.sidebar.title("補助金さん")
-st.sidebar.write("補助金・助成金に関してお任せください。")
+st.sidebar.write("補助金・助成金についてお任せあれ")
 
-user_input = st.sidebar.text_input("ご質問を入力してください。", key="user_input", on_change=communicate)
+user_input = st.sidebar.text_input("ご質問をどうぞ。", key="user_input", on_change=communicate)
 
 if st.session_state["qa"]:
     messages = st.session_state["qa"]
