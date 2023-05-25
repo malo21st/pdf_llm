@@ -37,7 +37,7 @@ user_input = st.text_input("メッセージを入力してください。", key=
 
 if st.session_state["messages"]:
     messages = st.session_state["messages"]
-    for message in reversed(messages[1:]):  # 直近のメッセージを上に
+    for message in reversed(messages):  # 直近のメッセージを上に
         if message["role"]=="assistant":
             st.success(message["content"])
         elif message["role"]=="user":
