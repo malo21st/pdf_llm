@@ -56,7 +56,7 @@ if st.session_state["qa"]:
             st.success(message["msg"])
 
 user_input = st.sidebar.text_input("ご質問をどうぞ", key="user_input", on_change=store_del_msg)
-st.sidebar.image(image, caption='展示会出展助成事業', width=150)
+st.sidebar.image(image, caption='展示会出展助成事業', use_column_width="auto")
 # here is the key, setup a empty container first
 chat_box=st.empty() 
 stream_handler = StreamHandler(chat_box)
