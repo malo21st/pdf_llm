@@ -33,6 +33,7 @@ if st.session_state["qa"]:
             st.info(message)
 
 user_input = st.sidebar.text_input("ご質問をどうぞ。", key="user_input", on_change=del_input)
+st.session_state["qa"].append(user_input)
 # here is the key, setup a empty container first
 chat_box=st.empty() 
 stream_handler = StreamHandler(chat_box)
@@ -40,6 +41,4 @@ chat = ChatOpenAI(streaming=True, callbacks=[stream_handler])
 if user_input: 
     response = chat([HumanMessage(content=user_input)])
 
-st.session_state["qa"].append(user_input)
-    
-
+st.session_state["qa"].append(response.content)
