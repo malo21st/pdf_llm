@@ -40,5 +40,4 @@ stream_handler = StreamHandler(chat_box)
 chat = ChatOpenAI(streaming=True, callbacks=[stream_handler])
 if user_input: 
     response = chat([HumanMessage(content=user_input)])
-
-st.session_state["qa"].append(response.content)
+    st.session_state["qa"].append(response.content)
