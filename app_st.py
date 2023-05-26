@@ -48,9 +48,9 @@ if st.session_state["qa"]:
     messages = st.session_state["qa"]
     for message in messages:  # 直近のメッセージを上に
         if message["role"] == "Q":
-            st.info(message)
+            st.info(message["msg"])
         elif message["role"] == "A":
-            st.success(message)
+            st.success(message["msg"])
 
 user_input = st.sidebar.text_input("ご質問をどうぞ", key="user_input", on_change=store_del_msg)
 # here is the key, setup a empty container first
@@ -60,7 +60,7 @@ qa = RetrievalQA.from_chain_type(llm=ChatOpenAI(model_name="gpt-3.5-turbo", stre
                                  chain_type="stuff", retriever=vectordb.as_retriever())
 
 if st.session_state["qa"]: 
-    query = st.session_state["qa"][-1]
+    query = st.session_state["qa"][-1]["msg"]
     try:
         response = qa.run(query)
     except Exception:
