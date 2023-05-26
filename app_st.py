@@ -25,8 +25,13 @@ prompt = PromptTemplate(
     template=template,
 )
 
-embeddings = OpenAIEmbeddings()
-vectordb = Chroma(persist_directory="VECTOR_DB", embedding_function = embeddings)
+@st.cache_data
+def load_vector_db():
+    embeddings = OpenAIEmbeddings()
+    vectordb = Chroma(persist_directory="VECTOR_DB", embedding_function = embeddings)
+    return vectordb
+
+vectordb = load_vector_db()
 
 if "qa" not in st.session_state:
     st.session_state["qa"] = []
