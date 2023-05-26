@@ -18,7 +18,7 @@ class StreamHandler(BaseCallbackHandler):
         self.container.info(self.text) 
 
 def store_del_msg():
-    st.session_state["qa"].append(user_input)
+    st.session_state["qa"].append(st.session_state["user_input"])
     st.session_state["user_input"] = ""  # 入力欄を消去
 
 # ユーザーインターフェイスの構築
