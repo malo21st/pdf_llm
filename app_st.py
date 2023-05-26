@@ -37,7 +37,7 @@ class StreamHandler(BaseCallbackHandler):
         self.container.success(self.text) 
 
 def store_del_msg():
-    st.session_state["qa"].append(st.session_state["user_input"])
+    st.session_state["qa"].append({"role": "Q", "msg": st.session_state["user_input"}])
     st.session_state["user_input"] = ""  # 入力欄を消去
 
 # ユーザーインターフェイスの構築
@@ -46,13 +46,13 @@ st.sidebar.write("補助金・助成金についてお任せあれ")
 
 if st.session_state["qa"]:
     messages = st.session_state["qa"]
-    for idx, message in enumerate(messages):  # 直近のメッセージを上に
-        if idx % 2:
-            st.success(message)
-        else:
+    for message in messages:  # 直近のメッセージを上に
+        if message["role"] == "Q":
             st.info(message)
+        elif message["role"] == "A":
+            st.success(message)
 
-user_input = st.sidebar.text_input("ご質問をどうぞ。", key="user_input", on_change=store_del_msg)
+user_input = st.sidebar.text_input("ご質問をどうぞ", key="user_input", on_change=store_del_msg)
 # here is the key, setup a empty container first
 chat_box=st.empty() 
 stream_handler = StreamHandler(chat_box)
@@ -61,5 +61,8 @@ qa = RetrievalQA.from_chain_type(llm=ChatOpenAI(model_name="gpt-3.5-turbo", stre
 
 if st.session_state["qa"]: 
     query = st.session_state["qa"][-1]
-    response = qa.run(query)
-    st.session_state["qa"].append(response)
+    try:
+        response = qa.run(query)
+    except Exception:
+        response = "申し訳ありません。エラーが発生しました。もう一度、質問して下さい。"
+    st.session_state["qa"].append({"role": "A", "msg": response})
