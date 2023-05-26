@@ -21,7 +21,7 @@ prompt = PromptTemplate(
 )
 
 embeddings = OpenAIEmbeddings()
-vectordb_ = Chroma(persist_directory="VECTOR_DB", embedding_function = embeddings)
+vectordb = Chroma(persist_directory="VECTOR_DB", embedding_function = embeddings)
 
 os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
 
@@ -58,10 +58,10 @@ chat_box=st.empty()
 stream_handler = StreamHandler(chat_box)
 # chat = ChatOpenAI(streaming=True, callbacks=[stream_handler])
 qa = RetrievalQA.from_chain_type(llm=ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True, callbacks=[stream_handler]), 
-                                 chain_type="stuff", retriever=vectordb_.as_retriever())
+                                 chain_type="stuff", retriever=vectordb.as_retriever())
 
 if st.session_state["qa"]: 
     query = st.session_state["qa"][-1]
 #     response = chat([HumanMessage(content=query)])
-    response = qa.run([HumanMessage(content=query)])
+    response = qa.run(HumanMessage(content=query))
     st.session_state["qa"].append(response.content)
