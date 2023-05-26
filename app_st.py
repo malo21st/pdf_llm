@@ -21,13 +21,13 @@ template = """
 """
 
 prompt = PromptTemplate(
-    input_variables=["question"],
-    template=template,
+    input_variables = ["question"],
+    template = template,
 )
 
 # Class and Function
 class StreamHandler(BaseCallbackHandler):
-    def __init__(self, container, initial_text=""):
+    def __init__(self, container, initial_text = ""):
         self.container = container
         self.text=initial_text
     def on_llm_new_token(self, token: str, **kwargs) -> None:
@@ -36,7 +36,7 @@ class StreamHandler(BaseCallbackHandler):
 
 @st.cache_resource
 def load_vector_db():
-    return Chroma(persist_directory="VECTOR_DB", embedding_function = OpenAIEmbeddings())
+    return Chroma(persist_directory = "VECTOR_DB", embedding_function = OpenAIEmbeddings())
 
 @st.cache_data
 def load_image():
@@ -51,27 +51,27 @@ vectordb = load_vector_db()
 image = load_image() 
 
 # View (User Interface)
-## Side Bar
+## Sidebar
 st.sidebar.title("補助金さん")
 st.sidebar.write("補助金・助成金についてお任せあれ")
-user_input = st.sidebar.text_input("ご質問をどうぞ", key="user_input", on_change=store_del_msg)
+user_input = st.sidebar.text_input("ご質問をどうぞ", key = "user_input", on_change = store_del_msg)
 st.sidebar.markdown("---")
-st.sidebar.image(image, caption='展示会出展助成事業（令和５年度　東京都）', use_column_width="auto")
-## Main
+st.sidebar.image(image, caption = '展示会出展助成事業（令和５年度　東京都）', use_column_width = "auto")
+## Main Content
 if st.session_state["qa"]:
     for message in st.session_state["qa"]:
-        if message["role"] == "Q":
+        if message["role"] == "Q": # Q: Question (User)
             st.info(message["msg"])
-        elif message["role"] == "A":
+        elif message["role"] == "A": # A: Answer (AI Assistant)
             st.success(message["msg"])
-        elif message["role"] == "E":
+        elif message["role"] == "E": # E: Error
             st.error(message["msg"])
 chat_box=st.empty() # Streaming message
 
 # Model (Business Logic)
 stream_handler = StreamHandler(chat_box)
-qa = RetrievalQA.from_chain_type(llm=ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True, callbacks=[stream_handler]), 
-                                 chain_type="stuff", retriever=vectordb.as_retriever())
+chat_llm = ChatOpenAI(model_name = "gpt-3.5-turbo", streaming = True, callbacks = [stream_handler])
+qa = RetrievalQA.from_chain_type(llm = chat_llm, chain_type = "stuff", retriever = vectordb.as_retriever())
 if st.session_state["qa"]: 
     query = st.session_state["qa"][-1]["msg"]
     try:
