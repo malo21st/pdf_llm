@@ -21,6 +21,7 @@ def del_input():
     st.session_state["user_input"] = ""  # 入力欄を消去
 
 # ユーザーインターフェイスの構築
+st.write(st.session_state["qa"])
 st.sidebar.title("補助金さん")
 st.sidebar.write("補助金・助成金についてお任せあれ")
 
