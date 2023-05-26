@@ -1,8 +1,24 @@
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage
+from langchain import PromptTemplate
 import streamlit as st
 import os
+
+# プロンプトの定義
+template = """
+あなたは親切なアシスタントです。下記の質問に日本語で回答してください。
+質問：{question}
+回答：
+"""
+
+prompt = PromptTemplate(
+    input_variables=["question"],
+    template=template,
+)
+
+embeddings = OpenAIEmbeddings()
+vectordb_ = Chroma(persist_directory="VECTOR_DB", embedding_function = embeddings)
 
 os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
 
@@ -37,8 +53,12 @@ user_input = st.sidebar.text_input("ご質問をどうぞ。", key="user_input",
 # here is the key, setup a empty container first
 chat_box=st.empty() 
 stream_handler = StreamHandler(chat_box)
-chat = ChatOpenAI(streaming=True, callbacks=[stream_handler])
+# chat = ChatOpenAI(streaming=True, callbacks=[stream_handler])
+qa = RetrievalQA.from_chain_type(llm=ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True, callbacks=[stream_handler]), 
+                                 chain_type="stuff", retriever=vectordb_.as_retriever())
+
 if st.session_state["qa"]: 
     query = st.session_state["qa"][-1]
-    response = chat([HumanMessage(content=query)])
+#     response = chat([HumanMessage(content=query)])
+    response = aq.run([HumanMessage(content=query)])
     st.session_state["qa"].append(response.content)
