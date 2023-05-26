@@ -25,7 +25,7 @@ prompt = PromptTemplate(
     template=template,
 )
 
-@st.cache_data
+@st.cache_resource
 def load_vector_db():
     embeddings = OpenAIEmbeddings()
     vectordb = Chroma(persist_directory="VECTOR_DB", embedding_function = embeddings)
