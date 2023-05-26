@@ -64,5 +64,5 @@ if st.session_state["qa"]:
     try:
         response = qa.run(query)
     except Exception:
-        response = "申し訳ありません。エラーが発生しました。もう一度、質問して下さい。"
+        response = "エラーが発生しました！　もう一度、質問して下さい。"
     st.session_state["qa"].append({"role": "A", "msg": response})
