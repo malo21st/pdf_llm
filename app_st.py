@@ -26,7 +26,7 @@ st.sidebar.write("補助金・助成金についてお任せあれ")
 
 if st.session_state["qa"]:
     messages = st.session_state["qa"]
-    for idx, message in enumeate(messages):  # 直近のメッセージを上に
+    for idx, message in enumerate(messages):  # 直近のメッセージを上に
         if idx % 2:
             st.success(message)
         else:
