@@ -17,7 +17,8 @@ class StreamHandler(BaseCallbackHandler):
         self.text+=token 
         self.container.info(self.text) 
 
-def del_input():
+def store_del_msg():
+    st.session_state["qa"].append(user_input)
     st.session_state["user_input"] = ""  # 入力欄を消去
 
 # ユーザーインターフェイスの構築
@@ -33,8 +34,7 @@ if st.session_state["qa"]:
         else:
             st.info(message)
 
-user_input = st.sidebar.text_input("ご質問をどうぞ。", key="user_input", on_change=del_input)
-st.session_state["qa"].append(user_input)
+user_input = st.sidebar.text_input("ご質問をどうぞ。", key="user_input", on_change=store_del_msg)
 # here is the key, setup a empty container first
 chat_box=st.empty() 
 stream_handler = StreamHandler(chat_box)
