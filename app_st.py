@@ -58,7 +58,7 @@ if st.session_state["qa"]:
             st.error(message["msg"])
 
 user_input = st.sidebar.text_input("ご質問をどうぞ", key="user_input", on_change=store_del_msg)
-st.markdown("---")
+st.sidebar.markdown("---")
 st.sidebar.image(image, caption='展示会出展助成事業（令和５年度　東京都）', use_column_width="auto")
 # here is the key, setup a empty container first
 chat_box=st.empty() 
