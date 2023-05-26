@@ -8,6 +8,8 @@ from langchain.chains import RetrievalQA
 import streamlit as st
 import os
 
+os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
+
 # プロンプトの定義
 template = """
 あなたは親切なアシスタントです。下記の質問に日本語で回答してください。
@@ -22,8 +24,6 @@ prompt = PromptTemplate(
 
 embeddings = OpenAIEmbeddings()
 vectordb = Chroma(persist_directory="VECTOR_DB", embedding_function = embeddings)
-
-os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
 
 if "qa" not in st.session_state:
     st.session_state["qa"] = []
