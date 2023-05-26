@@ -1,12 +1,12 @@
+import streamlit as st
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain import PromptTemplate
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 from langchain.chains import RetrievalQA
-import streamlit as st
-import os
 from PIL import Image
+import os
 
 os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
 
@@ -36,9 +36,7 @@ class StreamHandler(BaseCallbackHandler):
 
 @st.cache_resource
 def load_vector_db():
-    embeddings = OpenAIEmbeddings()
-    vectordb = Chroma(persist_directory="VECTOR_DB", embedding_function = embeddings)
-    return vectordb
+    return Chroma(persist_directory="VECTOR_DB", embedding_function = OpenAIEmbeddings())
 
 @st.cache_data
 def load_image():
@@ -52,30 +50,28 @@ def store_del_msg():
 vectordb = load_vector_db()
 image = load_image() 
 
-# View
+# View (User Interface)
 ## Side Bar
 st.sidebar.title("補助金さん")
 st.sidebar.write("補助金・助成金についてお任せあれ")
 user_input = st.sidebar.text_input("ご質問をどうぞ", key="user_input", on_change=store_del_msg)
 st.sidebar.markdown("---")
 st.sidebar.image(image, caption='展示会出展助成事業（令和５年度　東京都）', use_column_width="auto")
-
 ## Main
 if st.session_state["qa"]:
-    messages = st.session_state["qa"]
-    for message in messages:
+    for message in st.session_state["qa"]:
         if message["role"] == "Q":
             st.info(message["msg"])
         elif message["role"] == "A":
             st.success(message["msg"])
         elif message["role"] == "E":
             st.error(message["msg"])
-## Bottom of main: Streaming message
-chat_box=st.empty() 
+chat_box=st.empty() # Streaming message
+
+# Model (Business Logic)
 stream_handler = StreamHandler(chat_box)
 qa = RetrievalQA.from_chain_type(llm=ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True, callbacks=[stream_handler]), 
                                  chain_type="stuff", retriever=vectordb.as_retriever())
-
 if st.session_state["qa"]: 
     query = st.session_state["qa"][-1]["msg"]
     try:
