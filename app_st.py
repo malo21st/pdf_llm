@@ -54,8 +54,11 @@ if st.session_state["qa"]:
             st.info(message["msg"])
         elif message["role"] == "A":
             st.success(message["msg"])
+        elif message["role"] == "E":
+            st.error(message["msg"])
 
 user_input = st.sidebar.text_input("ご質問をどうぞ", key="user_input", on_change=store_del_msg)
+st.markdown("---")
 st.sidebar.image(image, caption='展示会出展助成事業（令和５年度　東京都）', use_column_width="auto")
 # here is the key, setup a empty container first
 chat_box=st.empty() 
@@ -67,6 +70,7 @@ if st.session_state["qa"]:
     query = st.session_state["qa"][-1]["msg"]
     try:
         response = qa.run(query)
+        st.session_state["qa"].append({"role": "A", "msg": response})
     except Exception:
         response = "エラーが発生しました！　もう一度、質問して下さい。"
-    st.session_state["qa"].append({"role": "A", "msg": response})
+        st.session_state["qa"].append({"role": "E", "msg": response})
