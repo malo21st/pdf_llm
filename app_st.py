@@ -15,7 +15,7 @@ class StreamHandler(BaseCallbackHandler):
         self.text=initial_text
     def on_llm_new_token(self, token: str, **kwargs) -> None:
         self.text+=token 
-        self.container.info(self.text) 
+        self.container.success(self.text) 
 
 def store_del_msg():
     st.session_state["qa"].append(st.session_state["user_input"])
