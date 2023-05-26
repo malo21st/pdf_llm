@@ -43,13 +43,13 @@ def store_del_msg():
     st.session_state["qa"].append({"role": "Q", "msg": st.session_state["user_input"]})
     st.session_state["user_input"] = ""  # 入力欄を消去
 
-# ユーザーインターフェイスの構築
+# ユーザーインターフェイス
 st.sidebar.title("補助金さん")
 st.sidebar.write("補助金・助成金についてお任せあれ")
 
 if st.session_state["qa"]:
     messages = st.session_state["qa"]
-    for message in messages:  # 直近のメッセージを上に
+    for message in messages:
         if message["role"] == "Q":
             st.info(message["msg"])
         elif message["role"] == "A":
