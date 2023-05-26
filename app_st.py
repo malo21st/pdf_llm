@@ -63,5 +63,5 @@ qa = RetrievalQA.from_chain_type(llm=ChatOpenAI(model_name="gpt-3.5-turbo", stre
 if st.session_state["qa"]: 
     query = st.session_state["qa"][-1]
 #     response = chat([HumanMessage(content=query)])
-    response = aq.run([HumanMessage(content=query)])
+    response = qa.run([HumanMessage(content=query)])
     st.session_state["qa"].append(response.content)
