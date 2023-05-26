@@ -14,7 +14,7 @@ class StreamHandler(BaseCallbackHandler):
         self.text+=token 
         self.container.info(self.text) 
 
-query=st.text_input("input your query",value="Tell me a joke")
+query=st.text_input("input your query")
 # ask_button=st.button("ask") 
 
 st.markdown("### streaming box")
@@ -22,3 +22,6 @@ st.markdown("### streaming box")
 chat_box=st.empty() 
 stream_handler = StreamHandler(chat_box)
 chat = ChatOpenAI(streaming=True, callbacks=[stream_handler])
+
+if query: 
+    response = chat([HumanMessage(content=query)])
