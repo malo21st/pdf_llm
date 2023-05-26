@@ -56,12 +56,10 @@ user_input = st.sidebar.text_input("ご質問をどうぞ。", key="user_input",
 # here is the key, setup a empty container first
 chat_box=st.empty() 
 stream_handler = StreamHandler(chat_box)
-# chat = ChatOpenAI(streaming=True, callbacks=[stream_handler])
 qa = RetrievalQA.from_chain_type(llm=ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True, callbacks=[stream_handler]), 
                                  chain_type="stuff", retriever=vectordb.as_retriever())
 
 if st.session_state["qa"]: 
     query = st.session_state["qa"][-1]
-#     response = chat([HumanMessage(content=query)])
     response = qa.run(query)
-    st.session_state["qa"].append(response.content)
+    st.session_state["qa"].append(response)
