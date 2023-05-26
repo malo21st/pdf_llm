@@ -7,8 +7,11 @@ from langchain.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 import streamlit as st
 import os
+from PIL import Image
 
 os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
+
+image = Image.open('tenjikai.png')
 
 # プロンプトの定義
 template = """
@@ -43,6 +46,7 @@ def store_del_msg():
 # ユーザーインターフェイスの構築
 st.sidebar.title("補助金さん")
 st.sidebar.write("補助金・助成金についてお任せあれ")
+st.sidebar.image(image, caption='展示会出展助成事業', width=150)
 
 if st.session_state["qa"]:
     messages = st.session_state["qa"]
