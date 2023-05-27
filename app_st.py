@@ -79,4 +79,5 @@ if st.session_state["qa"]:
         st.session_state["qa"].append({"role": "A", "msg": response})
     except Exception:
         response = "エラーが発生しました！　もう一度、質問して下さい。"
+        st.error(response)
         st.session_state["qa"].append({"role": "E", "msg": response})
