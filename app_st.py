@@ -16,7 +16,7 @@ if "qa" not in st.session_state:
 # Prompt
 template = """
 あなたは親切なアシスタントです。下記の質問に日本語で回答してください。
-質問：・{question}
+質問：{question}
 回答：
 """
 
@@ -73,7 +73,7 @@ stream_handler = StreamHandler(chat_box)
 chat_llm = ChatOpenAI(model_name = "gpt-3.5-turbo", streaming = True, callbacks = [stream_handler])
 qa = RetrievalQA.from_chain_type(llm = chat_llm, chain_type = "stuff", retriever = vectordb.as_retriever())
 if st.session_state["qa"]: 
-    query = st.session_state["qa"][-1]["msg"]
+    query = "・" + st.session_state["qa"][-1]["msg"]
     try:
         response = qa.run(query) # Query to ChatGPT
         st.session_state["qa"].append({"role": "A", "msg": response})
