@@ -10,7 +10,7 @@ import os
 
 os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
 
-INTRO = "この文章を概要を教えてください。なお、回答後に改行して、「ご質問をどうぞ。」を付けて下さい。"
+INTRO = "概要を教えてください。なお、回答後に改行して、「ご質問をどうぞ。」を付けて下さい。"
 if "qa" not in st.session_state:
     st.session_state["qa"] = [{"role": "Q", "msg": INTRO}]
 
