@@ -10,8 +10,9 @@ import os
 
 os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
 
+INTRO ＝ "この文章を概要を教えてください。なお、回答後に改行して、「ご質問をどうぞ。」を付けて下さい。"
 if "qa" not in st.session_state:
-    st.session_state["qa"] = []
+    st.session_state["qa"] = [{"role": "Q", "msg": INTRO}]
 
 # Prompt
 template = """
@@ -59,7 +60,7 @@ st.sidebar.markdown("---")
 st.sidebar.image(image, caption = '展示会出展助成事業（令和５年度　東京都）', use_column_width = "auto")
 ## Main Content
 if st.session_state["qa"]:
-    for message in st.session_state["qa"]:
+    for message in st.session_state["qa"][1:]:
         if message["role"] == "Q": # Q: Question (User)
             st.info(message["msg"])
         elif message["role"] == "A": # A: Answer (AI Assistant)
