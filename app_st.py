@@ -10,8 +10,9 @@ import os
 
 os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
 
+INTRO = "概要を教えてください。　回答後は、必ず'改行'して「質問をどうぞ。」を付けて下さい。"
 if "qa" not in st.session_state:
-    st.session_state["qa"] = [{"role": "Q", "msg": "概要を教えてください"}]
+    st.session_state["qa"] = [{"role": "Q", "msg": INTRO}]
 
 # Prompt
 template = """
@@ -76,10 +77,7 @@ if st.session_state["qa"]:
     query = "・" + st.session_state["qa"][-1]["msg"]
     try:
         response = qa.run(query) # Query to ChatGPT
-        if len(st.session_state["qa"]) == 1:
-            st.session_state["qa"].append({"role": "A", "msg": f"はじめに\n{response}\n質問をどうぞ。"})
-        else: 
-            st.session_state["qa"].append({"role": "A", "msg": response})
+        st.session_state["qa"].append({"role": "A", "msg": response})
     except Exception:
         response = "エラーが発生しました！　もう一度、質問して下さい。"
         st.error(response)
